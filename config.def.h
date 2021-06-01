@@ -50,12 +50,11 @@ static const Rule rules[] = {
 	 */
 	/* class                      instance    title       tags mask     isfloating   monitor */
 	{ "firefoxdeveloperedition",  NULL,       NULL,       1 << 0,            0,           -1 },
-        { "jetbrains-idea",           NULL,       NULL,       1 << 1,            0,           -1 },
-        { "Code",                     NULL,       NULL,       1 << 1,            0,           -1 },
-        { "Evolution",                NULL,       NULL,       1 << 2,            0,           -1 },
-        { "Ferdi",                    NULL,       NULL,       1 << 3,            0,           -1 },
-        { "Spotify",                  NULL,       NULL,       1 << 4,            0,           -1 },
-        { "Lutris",                   NULL,       NULL,       1 << 5,            1,           -1 }
+        { "jetbrains-idea",           NULL,       NULL,       1 << 2,            0,           -1 },
+        { "Code",                     NULL,       NULL,       1 << 2,            0,           -1 },
+        { "Ferdi",                    NULL,       NULL,       1 << 4,            0,           -1 },
+        { "Spotify",                  NULL,       NULL,       1 << 5,            0,           -1 },
+        { "Lutris",                   NULL,       NULL,       1 << 6,            1,           -1 }
 };
 
 /* layout(s) */
