@@ -36,7 +36,7 @@ static const char col_black[]       = "#282a36";
 static const char col_grey[]        = "#44475a";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeSel] = { col_offwhite, col_grey, col_grey },
+	[SchemeSel] = { col_offwhite, col_grey, col_pink },
 	[SchemeNorm]  = { col_gray3, col_black,  col_grey  },
 };
 
