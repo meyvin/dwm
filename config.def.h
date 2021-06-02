@@ -11,7 +11,8 @@ static const char *voldowncmd[] = { "amixer", "-q", "set", "Master", "5%-", "unm
 static const char *prtscrcmd[] = { "flameshot", "gui", NULL};
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const int gappx     = 5;                 /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 0;   	/* 0: systray in the right corner, >0: systray on left of status text */
@@ -37,7 +38,7 @@ static const char col_grey[]        = "#44475a";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeSel] = { col_offwhite, col_grey, col_pink },
-	[SchemeNorm]  = { col_gray3, col_black,  col_grey  },
+	[SchemeNorm]  = { col_gray3, col_black,  col_black  },
 };
 
 /* tagging */
@@ -115,6 +116,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+	{ MODKEY,                       XK_minus,  setgaps,        {.i = -5 } },
+	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
+	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
