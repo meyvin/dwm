@@ -88,7 +88,7 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_grey, "-nf", col_gray3, "-sb", col_pink, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *filemanager[] = { "pcmanfm", NULL };
-static const char *browser[] = { "chromium", NULL };
+static const char *browser[] = { "Brave-browser", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
