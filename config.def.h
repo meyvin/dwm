@@ -50,13 +50,13 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class                      instance    title       tags mask     isfloating   monitor */
-	{ "chromium",  NULL,       NULL,       1 << 0,            0,           -1 },
-        { "jetbrains-idea",           NULL,       NULL,       1 << 2,            0,           -1 },
-        { "Code",                     NULL,       NULL,       1 << 2,            0,           -1 },
-        { "Mailspring",               NULL,       NULL,       1 << 3,            0,           -1 },
-        { "Ferdi",                    NULL,       NULL,       1 << 4,            0,           -1 },
-        { "Spotify",                  NULL,       NULL,       1 << 5,            0,           -1 },
-        { "Lutris",                   NULL,       NULL,       1 << 6,            1,           -1 }
+	{ "Brave-browser",	      NULL,       NULL,       1 << 0,            0,           -1 },
+  	{ "jetbrains-idea",           NULL,       NULL,       1 << 2,            0,           -1 },
+  	{ "Code",                     NULL,       NULL,       1 << 2,            0,           -1 },
+  	{ "Mailspring",               NULL,       NULL,       1 << 3,            0,           -1 },
+  	{ "Ferdi",                    NULL,       NULL,       1 << 4,            0,           -1 },
+  	{ "Spotify",                  NULL,       NULL,       1 << 5,            0,           -1 },
+  	{ "Lutris",                   NULL,       NULL,       1 << 6,            1,           -1 },
 };
 
 /* layout(s) */
@@ -88,7 +88,8 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_grey, "-nf", col_gray3, "-sb", col_pink, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *filemanager[] = { "pcmanfm", NULL };
-static const char *browser[] = { "Brave-browser", NULL };
+static const char *browser[] = { "brave", NULL };
+static const char *lockscreen[] = { "lockscreen", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -100,6 +101,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
         { MODKEY|ShiftMask,             XK_f,      spawn,          {.v = filemanager } },
         { MODKEY|ShiftMask,             XK_b,      spawn,          {.v = browser } },
+        { MODKEY|ShiftMask,             XK_l,      spawn,          {.v = lockscreen } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
