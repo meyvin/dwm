@@ -6,6 +6,8 @@
 static const char *mutecmd[] = { "amixer", "-q", "set", "Master", "toggle", NULL };
 static const char *volupcmd[] = { "amixer", "-q", "set", "Master", "5%+", "unmute", NULL };
 static const char *voldowncmd[] = { "amixer", "-q", "set", "Master", "5%-", "unmute", NULL };
+static const char *brupcmd[] = { "brightnessctl", "set", "10%+", NULL };
+static const char *brdowncmd[] = { "brightnessctl", "set", "10%-", NULL };
 
 /* flameshot screenshots */
 static const char *prtscrcmd[] = { "flameshot", "gui", NULL};
@@ -93,15 +95,17 @@ static const char *lockscreen[] = { "lockscreen", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-        { 0, XF86XK_AudioMute, spawn, {.v = mutecmd } },
-        { 0, XF86XK_AudioLowerVolume, spawn, {.v = voldowncmd } },
-        { 0, XF86XK_AudioRaiseVolume, spawn, {.v = volupcmd } },
-        { 0, XK_Print, spawn, {.v = prtscrcmd } },
+  { 0,                            XF86XK_AudioMute,          spawn, {.v = mutecmd } },
+  { 0,                            XF86XK_AudioLowerVolume,   spawn, {.v = voldowncmd } },
+  { 0,                            XF86XK_AudioRaiseVolume,   spawn, {.v = volupcmd } },
+  { 0,                            XF86XK_MonBrightnessUp,    spawn,          {.v = brupcmd} },
+  { 0,                            XF86XK_MonBrightnessDown,  spawn,          {.v = brdowncmd} },
+  { 0,                            XK_Print,                  spawn, {.v = prtscrcmd } },
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
-        { MODKEY|ShiftMask,             XK_f,      spawn,          {.v = filemanager } },
-        { MODKEY|ShiftMask,             XK_b,      spawn,          {.v = browser } },
-        { MODKEY|ShiftMask,             XK_l,      spawn,          {.v = lockscreen } },
+  { MODKEY|ShiftMask,             XK_f,      spawn,          {.v = filemanager } },
+  { MODKEY|ShiftMask,             XK_b,      spawn,          {.v = browser } },
+  { MODKEY|ShiftMask,             XK_l,      spawn,          {.v = lockscreen } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
