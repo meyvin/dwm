@@ -3,15 +3,6 @@
 /* multimedia keys */
 #include <X11/XF86keysym.h>
 
-static const char *mutecmd[] = { "amixer", "-q", "set", "Master", "toggle", NULL };
-static const char *volupcmd[] = { "amixer", "-q", "set", "Master", "5%+", "unmute", NULL };
-static const char *voldowncmd[] = { "amixer", "-q", "set", "Master", "5%-", "unmute", NULL };
-static const char *brupcmd[] = { "brightnessctl", "set", "10%+", NULL };
-static const char *brdowncmd[] = { "brightnessctl", "set", "10%-", NULL };
-
-/* flameshot screenshots */
-static const char *prtscrcmd[] = { "flameshot", "gui", NULL};
-
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const int gappx     = 6;                 /* gaps between windows */
@@ -25,16 +16,68 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]	        = {"Jetbrainsmono Nerd Font:size=11:antialias=true:autohint=true"};
 static const char dmenufont[]       = "Jetbrainsmono Nerd Font:size=11:antialias=true:autohint=true";
-static const char col_gray1[]       = "#2e3440";
-static const char col_gray2[]       = "#434c5e";
-static const char col_gray3[]       = "#d8dee9";
-static const char col_gray4[]       = "#eceff4";
-static const char col_cyan[]        = "#88c0d0";
-static const char col_polar[]       = "#4c566a";
+
+/*******************************************************/
+/*            Nord Colour Scheme                       */
+/*                                                     */
+/* *** Polar Night (Blacks) ***                        */
+/* Dark               ->              Light            */
+/* Nord0   -> Nord1   -> Nord2   -> Nord3              */
+/* #2e3440 -> #3b4252 -> #434c5e -> #4c566a            */
+/*                                                     */
+/* *** Snow Storm (Whites) ***                         */
+/* Dark          ->        Light                       */
+/* Nord4   -> Nord5   -> Nord6                         */
+/* #d8dee9 -> #e5e9f0 -> #eceff4                       */
+/*                                                     */
+/* *** Frost (Blues) ***                               */
+/* Turquoise,    Eau de Nil,    Pale Blue,    Blue     */
+/* Nord7      -> Nord8       -> Nord9      -> Nord10   */
+/* #8fbcbb    -> #88c0d0     -> #81a1c1    -> #5e81ac  */
+/*                                                     */
+/* *** Aurora (Highlights) ***                         */
+/* Red,       Orange,    Yellow,    Green,     Purple  */
+/* Nord11  -> Nord12  -> Nord13  -> Nord14  -> Nord15  */
+/* #bf616a -> #d08770 -> #ebcb8b -> #a3be8c -> #b48ead */
+/*                                                     */
+/*******************************************************/
+
+static const char* const nord[]     = {
+        "#2e3440", "#3b4252", "#434c5e", "#4c566a",
+        "#d8dee9", "#e5e9f0", "#eceff4",
+        "#8fbcbb", "#88c0d0", "#81a1c1", "#5e81ac",
+        "#bf616a", "#d08770", "#ebcb8b", "#a3be8c", "#b48ead",
+};
+
+enum { SchemeNorm, SchemeSel,  SchemeUrg,  SchemeTitle, SchemeDead,
+       SchemeCol0, SchemeCol1, SchemeCol2, SchemeCol3,  SchemeCol4,
+       SchemeCol5, SchemeCol6, SchemeCol7, SchemeCol8,  SchemeCol9,
+       SchemeColA, SchemeColB, SchemeColC, SchemeColD,
+       SchemeColE, SchemeColF, }; /* color schemes */
+
 static const char *colors[][3]      = {
-	/*               fg         bg         border   */
-  [SchemeNorm] = { col_gray3, col_gray1, col_gray1 },
-  [SchemeSel]  = { col_gray4, col_polar,  col_cyan  },
+	/*              fg          bg        border    */
+	[SchemeNorm]  = { nord[4],  nord[0],  nord[0]   },
+	[SchemeSel]   = { nord[0],  nord[9],  nord[9]   },
+	[SchemeUrg]   = { nord[0],  nord[12], nord[11]  },
+	[SchemeTitle] = { nord[4],  nord[3],  nord[3]   },
+  [SchemeDead]  = { nord[0],  nord[0],  nord[0]   },
+	[SchemeCol0]  = { nord[0],  nord[0],  nord[0]   },
+	[SchemeCol1]  = { nord[1],  nord[0],  nord[0]   },
+	[SchemeCol2]  = { nord[2],  nord[0],  nord[0]   },
+	[SchemeCol3]  = { nord[3],  nord[0],  nord[0]   },
+	[SchemeCol4]  = { nord[4],  nord[0],  nord[0]   },
+	[SchemeCol5]  = { nord[5],  nord[0],  nord[0]   },
+	[SchemeCol6]  = { nord[6],  nord[0],  nord[0]   },
+	[SchemeCol7]  = { nord[7],  nord[0],  nord[0]   },
+	[SchemeCol8]  = { nord[8],  nord[0],  nord[0]   },
+	[SchemeCol9]  = { nord[9],  nord[0],  nord[0]   },
+	[SchemeColA]  = { nord[10], nord[0],  nord[0]   },
+	[SchemeColB]  = { nord[11], nord[0],  nord[0]   },
+	[SchemeColC]  = { nord[12], nord[0],  nord[0]   },
+	[SchemeColD]  = { nord[13], nord[0],  nord[0]   },
+	[SchemeColE]  = { nord[14], nord[0],  nord[0]   },
+	[SchemeColF]  = { nord[15], nord[0],  nord[0]   },
 };
 
 /* tagging */
@@ -81,11 +124,18 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_polar, "-sf", col_gray4, NULL };
+/*static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_polar, "-sf", col_gray4, NULL };*/
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", nord[0], "-nf", nord[4], "-sb", nord[9], "-sf", nord[0], NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *filemanager[] = { "pcmanfm", NULL };
 static const char *browser[] = { "brave", NULL };
 static const char *lockscreen[] = { "lockscreen", NULL };
+static const char *mutecmd[] = { "amixer", "-q", "set", "Master", "toggle", NULL };
+static const char *volupcmd[] = { "amixer", "-q", "set", "Master", "5%+", "unmute", NULL };
+static const char *voldowncmd[] = { "amixer", "-q", "set", "Master", "5%-", "unmute", NULL };
+static const char *brupcmd[] = { "brightnessctl", "set", "10%+", NULL };
+static const char *brdowncmd[] = { "brightnessctl", "set", "10%-", NULL };
+static const char *prtscrcmd[] = { "flameshot", "gui", NULL};
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
