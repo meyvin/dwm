@@ -119,15 +119,16 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 		/* class      instance    title       tags mask     isfloating   monitor */
-  /* class                      instance    title       tags mask
+		/* class                      instance    title       tags mask
    * isfloating   monitor */
-    { "Brave-browser",            NULL,       NULL,       1 << 0,            0,           -1 },
-    { "jetbrains-idea",           NULL,       NULL,       1 << 2,            0,           -1 },
-    { "Code",                     NULL,       NULL,       1 << 2,            0,           -1 },
-    { "Thunderbird",              NULL,       NULL,       1 << 3,            0,           -1 },
-    { "Ferdi",                    NULL,       NULL,       1 << 4,            0,           -1 },
-    { "Spotify",                  NULL,       NULL,       1 << 5,            0,           -1 },
-    { "Lutris",                   NULL,       NULL,       1 << 6,            1,           -1 },
+		{"Brave-browser", NULL, NULL, 1 << 0, 0, -1},
+		{"jetbrains-idea", NULL, NULL, 1 << 2, 0, -1},
+		{"Code", NULL, NULL, 1 << 2, 0, -1},
+		{"Thunderbird", NULL, NULL, 1 << 3, 0, -1},
+		{"Ferdi", NULL, NULL, 1 << 4, 0, -1},
+		{"Spotify", NULL, NULL, 1 << 5, 0, -1},
+		{"Lutris", NULL, NULL, 1 << 6, 1, -1},
+		{NULL, NULL, "scratchpad", 0, 1, -1, 's'},
 };
 
 /* layout(s) */
@@ -170,12 +171,14 @@ static const char *mutecmd[] = {"amixer", "-q", "set", "Master", "toggle", NULL}
 static const char *brupcmd[] = {"brightnessctl", "set", "10%+", NULL};
 static const char *brdowncmd[] = {"brightnessctl", "set", "10%-", NULL};
 static const char *prtscrcmd[] = {"flameshot", "gui", NULL};
+/*First arg only serves to match against key in rules*/
+static const char *scratchpadcmd[] = {"s", "alacritty", "-t", "scratchpad", NULL};
 
 static Key keys[] = {
 		/* modifier                     key        function        argument */
 		{0, XF86XK_AudioMute, spawn, {.v = mutecmd}},
-		{0, XF86XK_AudioLowerVolume, spawn, SHCMD("pamixer --decrease 5; pkill -RTMIN+3 dwmblocks") },
-		{0, XF86XK_AudioRaiseVolume, spawn, SHCMD("pamixer --increase 5; pkill -RTMIN+3 dwmblocks") },
+		{0, XF86XK_AudioLowerVolume, spawn, SHCMD("pamixer --decrease 5; pkill -RTMIN+3 dwmblocks")},
+		{0, XF86XK_AudioRaiseVolume, spawn, SHCMD("pamixer --increase 5; pkill -RTMIN+3 dwmblocks")},
 		{0, XF86XK_MonBrightnessUp, spawn, {.v = brupcmd}},
 		{0, XF86XK_MonBrightnessDown, spawn, {.v = brdowncmd}},
 		{0, XK_Print, spawn, {.v = prtscrcmd}},
@@ -184,6 +187,7 @@ static Key keys[] = {
 		{MODKEY | ShiftMask, XK_f, spawn, {.v = filemanager}},
 		{MODKEY | ShiftMask, XK_b, spawn, {.v = browser}},
 		{MODKEY | ShiftMask, XK_l, spawn, {.v = lockscreen}},
+		{MODKEY, XK_y, togglescratch, {.v = scratchpadcmd}},
 		{MODKEY, XK_b, togglebar, {0}},
 		{MODKEY, XK_j, focusstack, {.i = +1}},
 		{MODKEY, XK_k, focusstack, {.i = -1}},

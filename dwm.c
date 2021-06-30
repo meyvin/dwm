@@ -161,6 +161,7 @@ struct Client
 	int bw, oldbw;
 	unsigned int tags;
 	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
+	char scratchkey;
 	Client *next;
 	Client *snext;
 	Monitor *mon;
@@ -212,6 +213,7 @@ typedef struct
 	unsigned int tags;
 	int isfloating;
 	int monitor;
+	const char scratchkey;
 } Rule;
 
 typedef struct Systray Systray;
@@ -293,12 +295,14 @@ static void showhide(Client *c);
 static void sigchld(int unused);
 static void sigdwmblocks(const Arg *arg);
 static void spawn(const Arg *arg);
+static void spawnscratch(const Arg *arg);
 static Monitor *systraytomon(Monitor *m);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
+static void togglescratch(const Arg *arg);
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
 static void unfocus(Client *c, int setfocus);
@@ -389,6 +393,7 @@ void applyrules(Client *c)
 	/* rule matching */
 	c->isfloating = 0;
 	c->tags = 0;
+	c->scratchkey = 0;
 	XGetClassHint(dpy, c->win, &ch);
 	class = ch.res_class ? ch.res_class : broken;
 	instance = ch.res_name ? ch.res_name : broken;
@@ -400,6 +405,7 @@ void applyrules(Client *c)
 		{
 			c->isfloating = r->isfloating;
 			c->tags |= r->tags;
+			c->scratchkey = r->scratchkey;
 			for (m = mons; m && m->num != r->monitor; m = m->next)
 				;
 			if (m)
@@ -410,6 +416,7 @@ void applyrules(Client *c)
 		XFree(ch.res_class);
 	if (ch.res_name)
 		XFree(ch.res_name);
+
 	c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : c->mon->tagset[c->mon->seltags];
 }
 
@@ -2060,6 +2067,20 @@ void spawn(const Arg *arg)
 	}
 }
 
+void spawnscratch(const Arg *arg)
+{
+	if (fork() == 0)
+	{
+		if (dpy)
+			close(ConnectionNumber(dpy));
+		setsid();
+		execvp(((char **)arg->v)[1], ((char **)arg->v) + 1);
+		fprintf(stderr, "dwm: execvp %s", ((char **)arg->v)[1]);
+		perror(" failed");
+		exit(EXIT_SUCCESS);
+	}
+}
+
 void tag(const Arg *arg)
 {
 	if (selmon->sel && arg->ui & TAGMASK)
@@ -2138,6 +2159,31 @@ void togglefloating(const Arg *arg)
 		resize(selmon->sel, selmon->sel->x, selmon->sel->y,
 					 selmon->sel->w, selmon->sel->h, 0);
 	arrange(selmon);
+}
+
+void togglescratch(const Arg *arg)
+{
+	Client *c;
+	unsigned int found = 0;
+
+	for (c = selmon->clients; c && !(found = c->scratchkey == ((char **)arg->v)[0][0]); c = c->next)
+		;
+	if (found)
+	{
+		c->tags = ISVISIBLE(c) ? 0 : selmon->tagset[selmon->seltags];
+		focus(NULL);
+		arrange(selmon);
+
+		if (ISVISIBLE(c))
+		{
+			focus(c);
+			restack(selmon);
+		}
+	}
+	else
+	{
+		spawnscratch(arg);
+	}
 }
 
 void toggletag(const Arg *arg)
